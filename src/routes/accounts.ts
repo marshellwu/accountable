@@ -12,19 +12,19 @@ router
 
         if (!validation.success) return context.response.body = "Invalid data";
 
-        cockroachDB.connect();
+        await cockroachDB.connect();
         const result = await cockroachDB.queryObject(`
             INSERT INTO accounts(name)
             VALUES('${account.name}')
         `);
-        cockroachDB.end();
+        await cockroachDB.end();
 
         context.response.body = result;
     })
     .get("/", async (context) => {
-        cockroachDB.connect();
+        await cockroachDB.connect();
         const accounts = await cockroachDB.queryObject("SELECT name FROM accounts");
-        cockroachDB.end();
+        await cockroachDB.end();
 
         context.response.body = accounts.rows;
     });
